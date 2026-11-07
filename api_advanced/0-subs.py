@@ -1,13 +1,15 @@
 #!/usr/bin/python3
-#Return the number of subscribers for a subreddit.
+"""Module for querying Reddit subreddit subscribers."""
 
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Return the total number of subreddit subscribers."""
+    """Return the number of subscribers for a subreddit."""
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {"User-Agent": "ALU-RedditAPI/1.0"}
+    headers = {
+        "User-Agent": "ALU student Reddit API project"
+    }
 
     try:
         response = requests.get(
@@ -19,9 +21,7 @@ def number_of_subscribers(subreddit):
         if response.status_code != 200:
             return 0
 
-        data = response.json()
-        return data["data"]["subscribers"]
+        return response.json().get("data", {}).get("subscribers", 0)
 
-    except (requests.RequestException, ValueError, KeyError, TypeError):
+    except (requests.RequestException, ValueError, TypeError):
         return 0
-
